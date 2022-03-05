@@ -9,6 +9,7 @@ package manejador;
 
 import javax.swing.JTextArea;
 import modelo.Apuesta;
+import manejador.VerificadorApuesta;
 
 /**
  *
@@ -19,6 +20,8 @@ public class IngresoApuestas {
     
     public  Apuesta[] ingresarApuestas(JTextArea text) {
         
+        VerificadorApuesta verificador = new VerificadorApuesta();
+        
         Apuesta[] apuestas = new Apuesta[text.getLineCount()];
         
         
@@ -28,6 +31,7 @@ public class IngresoApuestas {
         for(int i=0; i<lineas.length; i++){
             String[] campos = separarLinea(lineas[i]);
             Apuesta apuesta = ConstructorDeApuestas.construirApuesta(campos);
+            apuesta.setIsCorrecta(verificador.verificarApuesta(apuesta.getPosicionesCaballos()));
             if(apuesta!=null){
                 apuestas[i] = apuesta;
             }

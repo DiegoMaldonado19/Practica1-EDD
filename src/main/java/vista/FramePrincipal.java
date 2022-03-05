@@ -18,8 +18,7 @@ import modelo.Apuesta;
  */
 public class FramePrincipal extends javax.swing.JFrame {
     private IngresoApuestas ingreso;
-    private Apuesta[] apuestasAprobadas;
-    private Apuesta[] apuestasRechazadas;
+    private Apuesta[] apuestas;
     private LectorDeArchivos lectorDeArchivos;
     /**
      * Creates new form FramePrincipal
@@ -56,7 +55,7 @@ public class FramePrincipal extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        textAreaResultados = new javax.swing.JTextArea();
         comboBoxNoCaballo = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
         botonAgregarCaballo = new javax.swing.JButton();
@@ -167,9 +166,9 @@ public class FramePrincipal extends javax.swing.JFrame {
 
         jLabel5.setText("En este espacio puedes ingresar manualmente tus resultados.");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
+        textAreaResultados.setColumns(20);
+        textAreaResultados.setRows(5);
+        jScrollPane2.setViewportView(textAreaResultados);
 
         comboBoxNoCaballo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Caballo 1", "Caballo 2", "Caballo 3", "Caballo 4", "Caballo 5", "Caballo 6", "Caballo 7", "Caballo 8", "Caballo 9", "Caballo 10" }));
 
@@ -182,6 +181,11 @@ public class FramePrincipal extends javax.swing.JFrame {
         botonIngresarResultado.setText("INGRESAR RESULTADO");
 
         botonCargaArchivoResultados.setText("CARGAR ARCHIVO");
+        botonCargaArchivoResultados.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonCargaArchivoResultadosActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -327,7 +331,10 @@ public class FramePrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botonIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonIngresarActionPerformed
-        this.apuestasAprobadas = ingreso.ingresarApuestas(this.areaTextoApuestas);
+        apuestas = ingreso.ingresarApuestas(this.areaTextoApuestas);
+        for(Apuesta apuesta: apuestas ){
+            System.out.println(apuesta.toString());
+        }
     }//GEN-LAST:event_botonIngresarActionPerformed
 
     private void botonCargaArchivoApuestasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCargaArchivoApuestasActionPerformed
@@ -348,6 +355,21 @@ public class FramePrincipal extends javax.swing.JFrame {
     private void botonLimpiarAreaApuestasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonLimpiarAreaApuestasActionPerformed
         this.areaTextoApuestas.setText(null);
     }//GEN-LAST:event_botonLimpiarAreaApuestasActionPerformed
+
+    private void botonCargaArchivoResultadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCargaArchivoResultadosActionPerformed
+        JFileChooser fileChosser = new JFileChooser();
+        int seleccion = fileChosser.showOpenDialog(this);
+        
+        if(seleccion == JFileChooser.APPROVE_OPTION){
+            File fichero = fileChosser.getSelectedFile();
+            try {
+                this.lectorDeArchivos.leerFichero(fichero, this.textAreaResultados);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Error al leer el archivo");
+                ex.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_botonCargaArchivoResultadosActionPerformed
 
     
 
@@ -378,8 +400,8 @@ public class FramePrincipal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTabbedPane panelGeneral;
     private javax.swing.JTable tablaServicios;
+    private javax.swing.JTextArea textAreaResultados;
     // End of variables declaration//GEN-END:variables
 }

@@ -12,11 +12,13 @@ public class Apuesta {
     private String nombreApostador;
     private int monto;
     private int[] posicionesCaballos;
+    private boolean isCorrecta;
 
     public Apuesta(String nombreApostador, int monto, int[] posicionesCaballos) {
         this.nombreApostador = nombreApostador;
         this.monto = monto;
         this.posicionesCaballos = posicionesCaballos;
+        this.isCorrecta=true;
     }
 
     public String getNombreApostador() {
@@ -43,10 +45,21 @@ public class Apuesta {
         this.posicionesCaballos = posicionesCaballos;
     }
 
+    public boolean isIsCorrecta() {
+        return isCorrecta;
+    }
+
+    public void setIsCorrecta(boolean isCorrecta) {
+        this.isCorrecta = isCorrecta;
+    }
+
     @Override
     public String toString() {
-        return "Apuesta{" + "nombreApostador=" + nombreApostador + ", monto=" + monto + ", posicionesCaballos=" + posicionesCaballos + '}';
+        return "Apuesta{" + "nombreApostador=" + nombreApostador + ", monto=" + monto + ", posicionesCaballos=" + posicionesCaballos + ", isCorrecta=" + isCorrecta + '}';
     }
+    
+    
+
     
     
     

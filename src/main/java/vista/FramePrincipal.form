@@ -293,7 +293,7 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JTextArea" name="jTextArea1">
+                <Component class="javax.swing.JTextArea" name="textAreaResultados">
                   <Properties>
                     <Property name="columns" type="int" value="20"/>
                     <Property name="rows" type="int" value="5"/>
@@ -346,6 +346,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="CARGAR ARCHIVO"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botonCargaArchivoResultadosActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
