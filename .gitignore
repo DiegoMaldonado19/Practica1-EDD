@@ -1,0 +1,5 @@
+*.class
+*.mf
+*.docx
+/target/
+*.jar
