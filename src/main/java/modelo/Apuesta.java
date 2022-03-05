@@ -13,12 +13,14 @@ public class Apuesta {
     private int monto;
     private int[] posicionesCaballos;
     private boolean isCorrecta;
+    private int puntaje;
 
     public Apuesta(String nombreApostador, int monto, int[] posicionesCaballos) {
         this.nombreApostador = nombreApostador;
         this.monto = monto;
         this.posicionesCaballos = posicionesCaballos;
         this.isCorrecta=true;
+        this.puntaje=0;
     }
 
     public String getNombreApostador() {
@@ -53,14 +55,16 @@ public class Apuesta {
         this.isCorrecta = isCorrecta;
     }
 
+    public int getPuntaje() {
+        return puntaje;
+    }
+
+    public void setPuntaje(int puntaje) {
+        this.puntaje = puntaje;
+    }
+
     @Override
     public String toString() {
-        return "Apuesta{" + "nombreApostador=" + nombreApostador + ", monto=" + monto + ", posicionesCaballos=" + posicionesCaballos + ", isCorrecta=" + isCorrecta + '}';
+        return "Apuesta{" + "nombreApostador=" + nombreApostador + ", monto=" + monto + ", posicionesCaballos=" + posicionesCaballos + ", isCorrecta=" + isCorrecta + ", puntaje=" + puntaje + '}';
     }
-    
-    
-
-    
-    
-    
 }

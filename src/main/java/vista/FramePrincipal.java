@@ -11,6 +11,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import manejador.IngresoApuestas;
 import modelo.Apuesta;
+import ordenamiento.Ordenamiento;
 
 /**
  *
@@ -20,6 +21,7 @@ public class FramePrincipal extends javax.swing.JFrame {
     private IngresoApuestas ingreso;
     private Apuesta[] apuestas;
     private LectorDeArchivos lectorDeArchivos;
+    private Ordenamiento ordenamiento;
     /**
      * Creates new form FramePrincipal
      */
@@ -29,6 +31,7 @@ public class FramePrincipal extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         ingreso =  new IngresoApuestas();
         lectorDeArchivos = new LectorDeArchivos();
+        ordenamiento = new Ordenamiento();
     }
 
     /**
@@ -55,7 +58,7 @@ public class FramePrincipal extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        textAreaResultados = new javax.swing.JTextArea();
+        areaTextoIngresoResultados = new javax.swing.JTextArea();
         comboBoxNoCaballo = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
         botonAgregarCaballo = new javax.swing.JButton();
@@ -69,6 +72,13 @@ public class FramePrincipal extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        areaTextoResultados = new javax.swing.JTextArea();
+        jLabel12 = new javax.swing.JLabel();
+        botonExportarResultados = new javax.swing.JButton();
+        botonOrdenarAlfabeticamente = new javax.swing.JButton();
+        botonOrdenarPorPuntaje = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -166,9 +176,9 @@ public class FramePrincipal extends javax.swing.JFrame {
 
         jLabel5.setText("En este espacio puedes ingresar manualmente tus resultados.");
 
-        textAreaResultados.setColumns(20);
-        textAreaResultados.setRows(5);
-        jScrollPane2.setViewportView(textAreaResultados);
+        areaTextoIngresoResultados.setColumns(20);
+        areaTextoIngresoResultados.setRows(5);
+        jScrollPane2.setViewportView(areaTextoIngresoResultados);
 
         comboBoxNoCaballo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Caballo 1", "Caballo 2", "Caballo 3", "Caballo 4", "Caballo 5", "Caballo 6", "Caballo 7", "Caballo 8", "Caballo 9", "Caballo 10" }));
 
@@ -287,7 +297,7 @@ public class FramePrincipal extends javax.swing.JFrame {
                     .addComponent(jLabel10)
                     .addComponent(jLabel11)
                     .addComponent(jLabel9))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 84, Short.MAX_VALUE)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 666, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(118, 118, 118))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
@@ -316,6 +326,66 @@ public class FramePrincipal extends javax.swing.JFrame {
 
         panelGeneral.addTab("REPORTES", jPanel4);
 
+        areaTextoResultados.setColumns(20);
+        areaTextoResultados.setRows(5);
+        jScrollPane3.setViewportView(areaTextoResultados);
+
+        jLabel12.setText("RESULTADOS DE APUESTAS");
+
+        botonExportarResultados.setText("EXPORTAR RESULTADOS");
+
+        botonOrdenarAlfabeticamente.setText("ORDENAR APUESTAS ALFABETICAMENTE");
+        botonOrdenarAlfabeticamente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonOrdenarAlfabeticamenteActionPerformed(evt);
+            }
+        });
+
+        botonOrdenarPorPuntaje.setText("ORDENAR APUESTAS POR PUNTAJE");
+        botonOrdenarPorPuntaje.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonOrdenarPorPuntajeActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(463, 463, 463)
+                        .addComponent(jLabel12))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(192, 192, 192)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(botonExportarResultados)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(botonOrdenarAlfabeticamente)
+                                .addGap(27, 27, 27)
+                                .addComponent(botonOrdenarPorPuntaje))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 723, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(309, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(52, 52, 52)
+                .addComponent(jLabel12)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(botonExportarResultados)
+                    .addComponent(botonOrdenarAlfabeticamente)
+                    .addComponent(botonOrdenarPorPuntaje))
+                .addContainerGap(34, Short.MAX_VALUE))
+        );
+
+        panelGeneral.addTab("ENTREGA DE RESULTADOS", jPanel3);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -331,10 +401,13 @@ public class FramePrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botonIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonIngresarActionPerformed
-        apuestas = ingreso.ingresarApuestas(this.areaTextoApuestas);
-        for(Apuesta apuesta: apuestas ){
-            System.out.println(apuesta.toString());
+        try{
+            this.apuestas = ingreso.ingresarApuestas(this.areaTextoApuestas);
         }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(this, "Se encontro una linea en blanco dentro del texto, revise por favor");
+        }
+        
     }//GEN-LAST:event_botonIngresarActionPerformed
 
     private void botonCargaArchivoApuestasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCargaArchivoApuestasActionPerformed
@@ -347,7 +420,6 @@ public class FramePrincipal extends javax.swing.JFrame {
                 this.lectorDeArchivos.leerFichero(fichero, this.areaTextoApuestas);
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this, "Error al leer el archivo");
-                ex.printStackTrace();
             }
         }
     }//GEN-LAST:event_botonCargaArchivoApuestasActionPerformed
@@ -363,29 +435,50 @@ public class FramePrincipal extends javax.swing.JFrame {
         if(seleccion == JFileChooser.APPROVE_OPTION){
             File fichero = fileChosser.getSelectedFile();
             try {
-                this.lectorDeArchivos.leerFichero(fichero, this.textAreaResultados);
+                this.lectorDeArchivos.leerFichero(fichero, this.areaTextoIngresoResultados);
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this, "Error al leer el archivo");
-                ex.printStackTrace();
             }
         }
     }//GEN-LAST:event_botonCargaArchivoResultadosActionPerformed
+
+    private void botonOrdenarAlfabeticamenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonOrdenarAlfabeticamenteActionPerformed
+        Apuesta[] resultadoOrdenado = ordenamiento.ordenarApuesta(this.apuestas, true); 
+        this.areaTextoResultados.setText(null);
+        for(int i=0; i<resultadoOrdenado.length; i++){
+            this.areaTextoResultados.append("\n"+resultadoOrdenado[i]);
+        }
+    }//GEN-LAST:event_botonOrdenarAlfabeticamenteActionPerformed
+
+    private void botonOrdenarPorPuntajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonOrdenarPorPuntajeActionPerformed
+        Apuesta[] resultadoOrdenado = ordenamiento.ordenarApuesta(this.apuestas, false); 
+        this.areaTextoResultados.setText(null);
+        for(int i=0; i<resultadoOrdenado.length; i++){
+            this.areaTextoResultados.append("\n"+resultadoOrdenado[i]);
+        }
+    }//GEN-LAST:event_botonOrdenarPorPuntajeActionPerformed
 
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea areaTextoApuestas;
+    private javax.swing.JTextArea areaTextoIngresoResultados;
+    private javax.swing.JTextArea areaTextoResultados;
     private javax.swing.JButton botonAgregarCaballo;
     private javax.swing.JButton botonCargaArchivoApuestas;
     private javax.swing.JButton botonCargaArchivoResultados;
+    private javax.swing.JButton botonExportarResultados;
     private javax.swing.JButton botonIngresar;
     private javax.swing.JButton botonIngresarResultado;
     private javax.swing.JButton botonLimpiarAreaApuestas;
     private javax.swing.JButton botonLimpiarAreaResultado;
+    private javax.swing.JButton botonOrdenarAlfabeticamente;
+    private javax.swing.JButton botonOrdenarPorPuntaje;
     private javax.swing.JComboBox<String> comboBoxNoCaballo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -396,12 +489,13 @@ public class FramePrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane panelGeneral;
     private javax.swing.JTable tablaServicios;
-    private javax.swing.JTextArea textAreaResultados;
     // End of variables declaration//GEN-END:variables
 }
