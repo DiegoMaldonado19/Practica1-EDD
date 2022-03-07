@@ -9,12 +9,22 @@ package modelo;
  * @author ACER
  */
 public class Apuesta {
+    
+    /**
+     * Variables que son necesarias para instanciar y son de importancia para el contexto del programa
+     */
     private String nombreApostador;
     private int monto;
     private int[] posicionesCaballos;
     private boolean isCorrecta;
     private int puntaje;
 
+    /**
+     * Constructor de la clase
+     * @param nombreApostador   nombre del apostador
+     * @param monto monto de la apuesta
+     * @param posicionesCaballos    arreglo que contiene las posiciones que el apostador eligio
+     */
     public Apuesta(String nombreApostador, int monto, int[] posicionesCaballos) {
         this.nombreApostador = nombreApostador;
         this.monto = monto;
@@ -23,6 +33,11 @@ public class Apuesta {
         this.puntaje=0;
     }
 
+    /**
+     * Getters y setters de la clase
+     * @return 
+     */
+    
     public String getNombreApostador() {
         return nombreApostador;
     }

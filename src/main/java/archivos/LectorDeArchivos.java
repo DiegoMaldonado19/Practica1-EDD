@@ -17,6 +17,13 @@ import javax.swing.JTextArea;
  */
 public class LectorDeArchivos {
     
+    /**
+     * Metodo para poder leer un archivo de texto
+     * @param archivo   archivo previamente seleccionado
+     * @param text  area de texto a donde agregamos los datos leidos de este archivo
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
      public void leerFichero(File archivo, JTextArea text) throws FileNotFoundException, IOException {
         FileReader fr = new FileReader(archivo);
         BufferedReader br = new BufferedReader(fr);

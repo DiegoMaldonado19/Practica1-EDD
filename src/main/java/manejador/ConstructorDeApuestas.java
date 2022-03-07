@@ -13,6 +13,11 @@ import modelo.Apuesta;
  */
 public class ConstructorDeApuestas {
     
+    /**
+     * Metodo estatico para construir una apuesta en el cual casteamos los campos enviados
+     * @param campos    arreglo de campos pertenecientes a una linea
+     * @return 
+     */
     public static Apuesta  construirApuesta(String[] campos){
         Apuesta apuesta = null;
         
@@ -21,7 +26,11 @@ public class ConstructorDeApuestas {
         return apuesta;
     }
     
-    
+    /**
+     * Metodo para castear un arreglo de tipo string a uno de tipo int
+     * @param campos
+     * @return 
+     */
     public static int[]  arregloToInt(String[] campos){
              
         int[] intArray = new int[campos.length-2];

@@ -12,6 +12,9 @@ import vista.FramePrincipal;
  */
 public class Run {
     public static void main(String[] args){
+        /**
+         * Clase que tiene como fin correr el programa
+         */
         FramePrincipal inicioFrame = new FramePrincipal();
     }
 }

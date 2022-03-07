@@ -11,6 +11,12 @@ import modelo.Apuesta;
  * @author ACER
  */
 public class Verificador {
+    
+    /**
+     * Metodo para verificar que un arreglo no contenga elementos repetidos
+     * @param caballos
+     * @return 
+     */
     public Boolean verificarArreglo(int[] caballos){
         
         boolean correcta=true;

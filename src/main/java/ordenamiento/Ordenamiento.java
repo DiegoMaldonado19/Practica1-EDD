@@ -12,6 +12,12 @@ import modelo.Apuesta;
  */
 public class Ordenamiento {
     
+    /**
+     * Metodo que sirve para saber que tipo de ordenamiento solicita el usuario
+     * @param apuestas  arreglo de apuestas
+     * @param alfabeticamente   booleana que nos sirve para saber si es un orden alfabetico o por puntaje
+     * @return 
+     */
     public static Apuesta[] ordenarApuesta(Apuesta[] apuestas, boolean alfabeticamente){
             if(alfabeticamente){
                 quickSortAlfabetico(apuestas, 0, apuestas.length-1);
@@ -22,6 +28,12 @@ public class Ordenamiento {
             return apuestas;     
     }
     
+    /**
+     * Metodo quicksort que fue el elegido como metodo de ordenamiento 
+     * @param array arreglo de apuestas
+     * @param inicio   valor entero del indice principal en este caso siempre cero
+     * @param fin   valor entero del indicie final que seria el tamaño del arreglo menos uno
+     */
     public static void quickSortAlfabetico(Apuesta[] array, int inicio, int fin){
         
         int i = inicio;
@@ -57,6 +69,12 @@ public class Ordenamiento {
         }
     }
     
+    /**
+     * Metodo quicksort para ordenar por punteos
+     * @param array arreglo de apuestas
+     * @param inicio    valor entero que es el inicio de nuestro arreglo siempre sera cero
+     * @param fin   valor entero que el indice final de nuestro arreglo 
+     */
     public static void quickSortPuntaje(Apuesta[] array, int inicio, int fin){
         
         int i = inicio;
@@ -93,6 +111,12 @@ public class Ordenamiento {
     }
     
     
+    /**
+     * Metodo para agilizar el cambio de elementos dentro del arreglo
+     * @param array arreglo de apuestas
+     * @param i iterador i
+     * @param j iterador j
+     */
     private static void cambio(Apuesta[] array, int i, int j){
         Apuesta temp = array[i];
         array[i] = array[j];

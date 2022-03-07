@@ -17,7 +17,11 @@ import manejador.Verificador;
  */
 public class IngresoApuestas {
     
-    
+    /**
+     * Metodo para ingresar las apuestas a nuestro sistema
+     * @param text  tomamos el texto del textArea el cual contiene todas las apuestas
+     * @return 
+     */
     public  Apuesta[] ingresarApuestas(JTextArea text) {
         
         Verificador verificador = new Verificador();
@@ -38,6 +42,11 @@ public class IngresoApuestas {
         return apuestas;
     }
     
+    /**
+     * Metodo para separar en campos cada linea perteneciente al JTextArea
+     * @param linea
+     * @return 
+     */
     public static String[] separarLinea(String linea){
         String[] campos = linea.split(",");
         return campos;

@@ -4,12 +4,12 @@
  */
 package vista;
 
-import archivos.LectorDeArchivos;
-import java.awt.Color;
+import archivos.*;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import modelo.Apuesta;
 import ordenamiento.Ordenamiento;
 import manejador.*;
@@ -19,6 +19,9 @@ import manejador.*;
  * @author ACER
  */
 public class FramePrincipal extends javax.swing.JFrame {
+    /**
+     * Variables privadas que nos sirven para desarrollar la logica del programa
+     */
     private IngresoApuestas ingreso;
     private Apuesta[] apuestas;
     private LectorDeArchivos lectorDeArchivos;
@@ -26,14 +29,18 @@ public class FramePrincipal extends javax.swing.JFrame {
     private Resultados creadorResultado;
     private Verificador verificador;
     private int contadorEntradas;
-    private Tabla manejadorTabla;
     private int[] resultados;
-    private long tiempoPromedio, tiempoInicial;
+    private long tiempoPromedioVerificacion, tiempoPromedioResultado, tiempoPromedioOrdenamientoA,tiempoPromedioOrdenamientoP;
     private int promedioPasos=0, mayorCantidadPasos=0, menorCantidadPasos=0;
+    private DefaultTableModel modelo;
+    private EscritorDeArchivos escritorArchivos;
     /**
      * Creates new form FramePrincipal
      */
     public FramePrincipal() {
+        /**
+         * Damos inicio a algunos componentes y generamos algunos valores que nos serviran mas adelante
+         */
         initComponents();
         this.setVisible(true);
         this.setLocationRelativeTo(null);
@@ -42,12 +49,24 @@ public class FramePrincipal extends javax.swing.JFrame {
         this.ordenamiento = new Ordenamiento();
         this.creadorResultado = new Resultados();
         this.verificador = new Verificador();
-        this.manejadorTabla = new Tabla();
+        this.escritorArchivos = new EscritorDeArchivos();
+        
         this.contadorEntradas=0;
-        this.tiempoPromedio =0;
+        this.tiempoPromedioVerificacion =0;
+        this.tiempoPromedioOrdenamientoA=0;
+        this.tiempoPromedioOrdenamientoP=0;
         this.promedioPasos=0;
         this.menorCantidadPasos=0;
         this.mayorCantidadPasos=0;
+        
+        this.modelo = new DefaultTableModel();
+        
+        this.tablaServicios.setModel(this.modelo);
+        
+        modelo.addColumn("Tiempo Promedio de Proceso de Apuestas en milisegundos");
+        modelo.addColumn("Promedio de pasos");
+        modelo.addColumn("Mayor cantidad de pasos");
+        modelo.addColumn("Menor cantidad de pasos");
     }
 
     /**
@@ -247,6 +266,11 @@ public class FramePrincipal extends javax.swing.JFrame {
         jLabel12.setText("RESULTADOS DE APUESTAS");
 
         botonExportarResultados.setText("EXPORTAR RESULTADOS");
+        botonExportarResultados.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonExportarResultadosActionPerformed(evt);
+            }
+        });
 
         botonOrdenarAlfabeticamente.setText("ORDENAR APUESTAS ALFABETICAMENTE");
         botonOrdenarAlfabeticamente.addActionListener(new java.awt.event.ActionListener() {
@@ -431,12 +455,15 @@ public class FramePrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botonIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonIngresarActionPerformed
+        /**
+         * Metodo para ingresar apuestas en el cual analizamos cuanto tiempo nos tardamos
+         */
         try{
-            this.tiempoInicial = System.currentTimeMillis();
+            long tiempoInicial = System.currentTimeMillis();
             
             this.apuestas = ingreso.ingresarApuestas(this.areaTextoApuestas);
             
-            this.tiempoPromedio += System.currentTimeMillis() - this.tiempoInicial;
+            this.tiempoPromedioVerificacion += System.currentTimeMillis() - tiempoInicial;
             
             JOptionPane.showMessageDialog(this, "Apuestas Ingresadas con exito");
         }
@@ -447,6 +474,9 @@ public class FramePrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_botonIngresarActionPerformed
 
     private void botonCargaArchivoApuestasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCargaArchivoApuestasActionPerformed
+        /**
+         * Logica para leer un archivo de texto
+         */
         JFileChooser fileChosser = new JFileChooser();
         int seleccion = fileChosser.showOpenDialog(this);
         
@@ -461,28 +491,47 @@ public class FramePrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_botonCargaArchivoApuestasActionPerformed
 
     private void botonLimpiarAreaApuestasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonLimpiarAreaApuestasActionPerformed
+        /**
+         * Limpiamos el texto del contenedor
+         */
         this.areaTextoApuestas.setText(null);
     }//GEN-LAST:event_botonLimpiarAreaApuestasActionPerformed
 
     private void botonOrdenarAlfabeticamenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonOrdenarAlfabeticamenteActionPerformed
-        Apuesta[] resultSort = ordenamiento.ordenarApuesta(this.apuestas, true); 
+        /**
+         * Logica para ordenar el arreglo de apuestas
+         */
+        long tiempoInicial = System.currentTimeMillis();
+        this.apuestas = ordenamiento.ordenarApuesta(this.apuestas, true); 
+        this.tiempoPromedioOrdenamientoA += (System.currentTimeMillis() - tiempoInicial);
+        
         this.areaTextoResultados.setText(null);
-        for(int i=0; i<resultSort.length; i++){
-            this.areaTextoResultados.append("\n"+"El Apostador: "+resultSort[i].getNombreApostador()+
-                    " obtuvo el siguiente puntaje: "+resultSort[i].getPuntaje());
+        
+        for(int i=0; i<this.apuestas.length; i++){
+            this.areaTextoResultados.append("\n"+"El Apostador: "+this.apuestas[i].getNombreApostador()+
+                    " obtuvo el siguiente puntaje: "+this.apuestas[i].getPuntaje());
         }
     }//GEN-LAST:event_botonOrdenarAlfabeticamenteActionPerformed
 
     private void botonOrdenarPorPuntajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonOrdenarPorPuntajeActionPerformed
-        Apuesta[] resultSort = ordenamiento.ordenarApuesta(this.apuestas, false); 
+        /**
+         * Logica para ordenar el arreglo de apuestas
+         */
+        long tiempoInicial = System.currentTimeMillis();
+        this.apuestas = ordenamiento.ordenarApuesta(this.apuestas, false);
+        this.tiempoPromedioOrdenamientoP += (System.currentTimeMillis() - tiempoInicial);
+        
         this.areaTextoResultados.setText(null);
-        for(int i=0; i<resultSort.length; i++){
-            this.areaTextoResultados.append("\n"+"El Apostador: "+resultSort[i].getNombreApostador()+
-                    " obtuvo el siguiente puntaje: "+resultSort[i].getPuntaje());
+        for(int i=0; i<this.apuestas.length; i++){
+            this.areaTextoResultados.append("\n"+"El Apostador: "+this.apuestas[i].getNombreApostador()+
+                    " obtuvo el siguiente puntaje: "+this.apuestas[i].getPuntaje());
         }
     }//GEN-LAST:event_botonOrdenarPorPuntajeActionPerformed
 
     private void botonCargaArchivoResultadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCargaArchivoResultadosActionPerformed
+        /**
+         * Logica para leer un archivo
+         */
         JFileChooser fileChosser = new JFileChooser();
         int seleccion = fileChosser.showOpenDialog(this);
 
@@ -497,6 +546,9 @@ public class FramePrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_botonCargaArchivoResultadosActionPerformed
 
     private void botonAgregarCaballoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAgregarCaballoActionPerformed
+        /**
+         * Logica para añadir las posiciones de los caballos al acabar la carrera
+         */
         if(this.listaCaballos.getSelectedIndex()==-1){
             JOptionPane.showMessageDialog(this, "No has seleccionado ningun elemento de la lista, tienes que seleccionar uno");
         }
@@ -516,11 +568,17 @@ public class FramePrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_botonAgregarCaballoActionPerformed
 
     private void botonLimpiarAreaResultadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonLimpiarAreaResultadoActionPerformed
+        /**
+         * Limpiamos el contenedor e igualamos a cero el contador de instancias
+         */
         this.areaTextoIngresoResultados.setText(null);
         this.contadorEntradas=0;
     }//GEN-LAST:event_botonLimpiarAreaResultadoActionPerformed
 
     private void botonIngresarResultadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonIngresarResultadoActionPerformed
+        /**
+         * Logica para crear un resultado
+         */
         this.resultados = this.creadorResultado.crearResultado(this.areaTextoIngresoResultados.getText());
         
         if(this.verificador.verificarArreglo(this.resultados)){
@@ -534,8 +592,20 @@ public class FramePrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_botonIngresarResultadoActionPerformed
 
     private void botonReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonReportesActionPerformed
-        this.manejadorTabla.llenarTabla(tablaServicios, this.tiempoPromedio, this.promedioPasos, this.mayorCantidadPasos, this.menorCantidadPasos);
+        /**
+         * Añadimos los reportes con los tiempos calculados
+         */
+        this.modelo.addRow(new Object[]{this.tiempoPromedioVerificacion, promedioPasos, mayorCantidadPasos, menorCantidadPasos});
+        this.modelo.addRow(new Object[]{this.tiempoPromedioOrdenamientoA, promedioPasos, mayorCantidadPasos, menorCantidadPasos});
+        this.modelo.addRow(new Object[]{this.tiempoPromedioOrdenamientoP, promedioPasos, mayorCantidadPasos, menorCantidadPasos});
     }//GEN-LAST:event_botonReportesActionPerformed
+
+    private void botonExportarResultadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonExportarResultadosActionPerformed
+       /**
+        * Aqui se busca generar el archivo de texto exportando las apuestas
+        */
+        this.escritorArchivos.escribirArchivo(this, this.apuestas);
+    }//GEN-LAST:event_botonExportarResultadosActionPerformed
 
     
 
