@@ -5,13 +5,14 @@
 package vista;
 
 import archivos.LectorDeArchivos;
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import manejador.IngresoApuestas;
 import modelo.Apuesta;
 import ordenamiento.Ordenamiento;
+import manejador.*;
 
 /**
  *
@@ -22,6 +23,13 @@ public class FramePrincipal extends javax.swing.JFrame {
     private Apuesta[] apuestas;
     private LectorDeArchivos lectorDeArchivos;
     private Ordenamiento ordenamiento;
+    private Resultados creadorResultado;
+    private Verificador verificador;
+    private int contadorEntradas;
+    private Tabla manejadorTabla;
+    private int[] resultados;
+    private long tiempoPromedio, tiempoInicial;
+    private int promedioPasos=0, mayorCantidadPasos=0, menorCantidadPasos=0;
     /**
      * Creates new form FramePrincipal
      */
@@ -29,9 +37,17 @@ public class FramePrincipal extends javax.swing.JFrame {
         initComponents();
         this.setVisible(true);
         this.setLocationRelativeTo(null);
-        ingreso =  new IngresoApuestas();
-        lectorDeArchivos = new LectorDeArchivos();
-        ordenamiento = new Ordenamiento();
+        this.ingreso =  new IngresoApuestas();
+        this.lectorDeArchivos = new LectorDeArchivos();
+        this.ordenamiento = new Ordenamiento();
+        this.creadorResultado = new Resultados();
+        this.verificador = new Verificador();
+        this.manejadorTabla = new Tabla();
+        this.contadorEntradas=0;
+        this.tiempoPromedio =0;
+        this.promedioPasos=0;
+        this.menorCantidadPasos=0;
+        this.mayorCantidadPasos=0;
     }
 
     /**
@@ -54,24 +70,11 @@ public class FramePrincipal extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         botonLimpiarAreaApuestas = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        areaTextoIngresoResultados = new javax.swing.JTextArea();
-        comboBoxNoCaballo = new javax.swing.JComboBox<>();
-        jLabel7 = new javax.swing.JLabel();
-        botonAgregarCaballo = new javax.swing.JButton();
-        botonLimpiarAreaResultado = new javax.swing.JButton();
-        botonIngresarResultado = new javax.swing.JButton();
-        botonCargaArchivoResultados = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         tablaServicios = new javax.swing.JTable();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
+        botonReportes = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         areaTextoResultados = new javax.swing.JTextArea();
@@ -79,6 +82,18 @@ public class FramePrincipal extends javax.swing.JFrame {
         botonExportarResultados = new javax.swing.JButton();
         botonOrdenarAlfabeticamente = new javax.swing.JButton();
         botonOrdenarPorPuntaje = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        areaTextoIngresoResultados = new javax.swing.JTextArea();
+        botonAgregarCaballo = new javax.swing.JButton();
+        botonLimpiarAreaResultado = new javax.swing.JButton();
+        botonIngresarResultado = new javax.swing.JButton();
+        botonCargaArchivoResultados = new javax.swing.JButton();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        listaCaballos = new javax.swing.JList<>();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -143,7 +158,7 @@ public class FramePrincipal extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(288, 288, 288)
                         .addComponent(botonIngresar)))
-                .addContainerGap(396, Short.MAX_VALUE))
+                .addContainerGap(1078, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -171,100 +186,6 @@ public class FramePrincipal extends javax.swing.JFrame {
 
         panelGeneral.addTab("INGRESAR DE PUESTAS", jPanel1);
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel4.setText("MODULO DE INGRESO DE RESULTADOS");
-
-        jLabel5.setText("En este espacio puedes ingresar manualmente tus resultados.");
-
-        areaTextoIngresoResultados.setColumns(20);
-        areaTextoIngresoResultados.setRows(5);
-        jScrollPane2.setViewportView(areaTextoIngresoResultados);
-
-        comboBoxNoCaballo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Caballo 1", "Caballo 2", "Caballo 3", "Caballo 4", "Caballo 5", "Caballo 6", "Caballo 7", "Caballo 8", "Caballo 9", "Caballo 10" }));
-
-        jLabel7.setText("No. Caballo");
-
-        botonAgregarCaballo.setText("AGREGAR CABALLO");
-
-        botonLimpiarAreaResultado.setText("BORRAR TEXTO");
-
-        botonIngresarResultado.setText("INGRESAR RESULTADO");
-
-        botonCargaArchivoResultados.setText("CARGAR ARCHIVO");
-        botonCargaArchivoResultados.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonCargaArchivoResultadosActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(comboBoxNoCaballo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(107, 107, 107)
-                                .addComponent(botonAgregarCaballo))
-                            .addComponent(jLabel7)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(230, 230, 230)
-                        .addComponent(botonLimpiarAreaResultado)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 444, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(botonCargaArchivoResultados, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(240, 240, 240))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(483, 483, 483)
-                .addComponent(jLabel4)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addGap(425, 425, 425))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(botonIngresarResultado)
-                        .addGap(523, 523, 523))))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(136, 136, 136)
-                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(comboBoxNoCaballo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(2, 2, 2)
-                                .addComponent(botonAgregarCaballo)))
-                        .addGap(18, 18, 18)
-                        .addComponent(botonLimpiarAreaResultado))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(47, 47, 47)
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel5)
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(botonCargaArchivoResultados, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(botonIngresarResultado)
-                .addContainerGap(106, Short.MAX_VALUE))
-        );
-
-        panelGeneral.addTab("INGRESO DE RESULTADOS", jPanel2);
-
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel8.setText("REPORTES");
 
@@ -281,47 +202,40 @@ public class FramePrincipal extends javax.swing.JFrame {
         ));
         jScrollPane4.setViewportView(tablaServicios);
 
-        jLabel9.setText("SERVICIO CRITICO 2: \"VERIFICACION DE APUESTAS\"");
-
-        jLabel10.setText("SERVICIO CRITICO 3: \"CALCULO DE RESULTADOS\"");
-
-        jLabel11.setText("SERVICIO CRITICO 4: ORDENAMIENTO");
+        botonReportes.setText("GENERAR REPORTE");
+        botonReportes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonReportesActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(56, 56, 56)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel10)
-                    .addComponent(jLabel11)
-                    .addComponent(jLabel9))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 84, Short.MAX_VALUE)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 666, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(118, 118, 118))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel8)
-                .addGap(444, 444, 444))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(774, 774, 774)
+                        .addComponent(jLabel8))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(753, 753, 753)
+                        .addComponent(botonReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(348, 348, 348)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 985, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(573, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addGap(53, 53, 53)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(84, 84, 84)
                 .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel9)
-                        .addGap(83, 83, 83)
-                        .addComponent(jLabel10)
-                        .addGap(81, 81, 81)
-                        .addComponent(jLabel11)
-                        .addGap(155, 155, 155))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(89, 89, 89))))
+                .addGap(36, 36, 36)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(botonReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(37, Short.MAX_VALUE))
         );
 
         panelGeneral.addTab("REPORTES", jPanel4);
@@ -367,7 +281,7 @@ public class FramePrincipal extends javax.swing.JFrame {
                                 .addGap(27, 27, 27)
                                 .addComponent(botonOrdenarPorPuntaje))
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 723, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(309, Short.MAX_VALUE))
+                .addContainerGap(991, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -386,6 +300,122 @@ public class FramePrincipal extends javax.swing.JFrame {
 
         panelGeneral.addTab("ENTREGA DE RESULTADOS", jPanel3);
 
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel4.setText("MODULO DE INGRESO DE RESULTADOS");
+
+        jLabel5.setText("En este espacio puedes ingresar manualmente tus resultados.");
+
+        areaTextoIngresoResultados.setColumns(20);
+        areaTextoIngresoResultados.setRows(5);
+        jScrollPane2.setViewportView(areaTextoIngresoResultados);
+
+        botonAgregarCaballo.setText("AGREGAR CABALLO");
+        botonAgregarCaballo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonAgregarCaballoActionPerformed(evt);
+            }
+        });
+
+        botonLimpiarAreaResultado.setText("BORRAR TEXTO");
+        botonLimpiarAreaResultado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonLimpiarAreaResultadoActionPerformed(evt);
+            }
+        });
+
+        botonIngresarResultado.setText("INGRESAR RESULTADO");
+        botonIngresarResultado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonIngresarResultadoActionPerformed(evt);
+            }
+        });
+
+        botonCargaArchivoResultados.setText("CARGAR ARCHIVO");
+        botonCargaArchivoResultados.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonCargaArchivoResultadosActionPerformed(evt);
+            }
+        });
+
+        jScrollPane5.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        listaCaballos.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        listaCaballos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane5.setViewportView(listaCaballos);
+
+        jLabel7.setText("No. Caballo");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(50, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(37, 37, 37)
+                        .addComponent(botonAgregarCaballo)
+                        .addGap(68, 68, 68))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(botonLimpiarAreaResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(31, 31, 31)))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(botonCargaArchivoResultados, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(920, 920, 920))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(483, 483, 483)
+                        .addComponent(jLabel4))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(527, 527, 527)
+                        .addComponent(botonIngresarResultado))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(437, 437, 437)
+                        .addComponent(jLabel5)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(botonCargaArchivoResultados, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGap(47, 47, 47)
+                        .addComponent(jLabel4)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(152, 152, 152)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(botonAgregarCaballo))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(botonLimpiarAreaResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGap(26, 26, 26)
+                .addComponent(botonIngresarResultado)
+                .addGap(63, 63, 63))
+        );
+
+        panelGeneral.addTab("INGRESO DE RESULTADOS", jPanel2);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -402,7 +432,13 @@ public class FramePrincipal extends javax.swing.JFrame {
 
     private void botonIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonIngresarActionPerformed
         try{
+            this.tiempoInicial = System.currentTimeMillis();
+            
             this.apuestas = ingreso.ingresarApuestas(this.areaTextoApuestas);
+            
+            this.tiempoPromedio += System.currentTimeMillis() - this.tiempoInicial;
+            
+            JOptionPane.showMessageDialog(this, "Apuestas Ingresadas con exito");
         }
         catch(Exception e){
             JOptionPane.showMessageDialog(this, "Se encontro una linea en blanco dentro del texto, revise por favor");
@@ -428,10 +464,28 @@ public class FramePrincipal extends javax.swing.JFrame {
         this.areaTextoApuestas.setText(null);
     }//GEN-LAST:event_botonLimpiarAreaApuestasActionPerformed
 
+    private void botonOrdenarAlfabeticamenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonOrdenarAlfabeticamenteActionPerformed
+        Apuesta[] resultSort = ordenamiento.ordenarApuesta(this.apuestas, true); 
+        this.areaTextoResultados.setText(null);
+        for(int i=0; i<resultSort.length; i++){
+            this.areaTextoResultados.append("\n"+"El Apostador: "+resultSort[i].getNombreApostador()+
+                    " obtuvo el siguiente puntaje: "+resultSort[i].getPuntaje());
+        }
+    }//GEN-LAST:event_botonOrdenarAlfabeticamenteActionPerformed
+
+    private void botonOrdenarPorPuntajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonOrdenarPorPuntajeActionPerformed
+        Apuesta[] resultSort = ordenamiento.ordenarApuesta(this.apuestas, false); 
+        this.areaTextoResultados.setText(null);
+        for(int i=0; i<resultSort.length; i++){
+            this.areaTextoResultados.append("\n"+"El Apostador: "+resultSort[i].getNombreApostador()+
+                    " obtuvo el siguiente puntaje: "+resultSort[i].getPuntaje());
+        }
+    }//GEN-LAST:event_botonOrdenarPorPuntajeActionPerformed
+
     private void botonCargaArchivoResultadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCargaArchivoResultadosActionPerformed
         JFileChooser fileChosser = new JFileChooser();
         int seleccion = fileChosser.showOpenDialog(this);
-        
+
         if(seleccion == JFileChooser.APPROVE_OPTION){
             File fichero = fileChosser.getSelectedFile();
             try {
@@ -442,21 +496,46 @@ public class FramePrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_botonCargaArchivoResultadosActionPerformed
 
-    private void botonOrdenarAlfabeticamenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonOrdenarAlfabeticamenteActionPerformed
-        Apuesta[] resultadoOrdenado = ordenamiento.ordenarApuesta(this.apuestas, true); 
-        this.areaTextoResultados.setText(null);
-        for(int i=0; i<resultadoOrdenado.length; i++){
-            this.areaTextoResultados.append("\n"+resultadoOrdenado[i]);
+    private void botonAgregarCaballoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAgregarCaballoActionPerformed
+        if(this.listaCaballos.getSelectedIndex()==-1){
+            JOptionPane.showMessageDialog(this, "No has seleccionado ningun elemento de la lista, tienes que seleccionar uno");
         }
-    }//GEN-LAST:event_botonOrdenarAlfabeticamenteActionPerformed
+        else{
+            if(this.contadorEntradas<9){
+                this.areaTextoIngresoResultados.append(this.listaCaballos.getSelectedValue()+",");
+                this.contadorEntradas++;
+            }
+            else if(this.contadorEntradas==9){
+                this.areaTextoIngresoResultados.append(this.listaCaballos.getSelectedValue());
+                this.contadorEntradas++;
+            }
+            else{
+                JOptionPane.showMessageDialog(this, "Orden completado con exito");
+            }
+        }
+    }//GEN-LAST:event_botonAgregarCaballoActionPerformed
 
-    private void botonOrdenarPorPuntajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonOrdenarPorPuntajeActionPerformed
-        Apuesta[] resultadoOrdenado = ordenamiento.ordenarApuesta(this.apuestas, false); 
-        this.areaTextoResultados.setText(null);
-        for(int i=0; i<resultadoOrdenado.length; i++){
-            this.areaTextoResultados.append("\n"+resultadoOrdenado[i]);
+    private void botonLimpiarAreaResultadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonLimpiarAreaResultadoActionPerformed
+        this.areaTextoIngresoResultados.setText(null);
+        this.contadorEntradas=0;
+    }//GEN-LAST:event_botonLimpiarAreaResultadoActionPerformed
+
+    private void botonIngresarResultadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonIngresarResultadoActionPerformed
+        this.resultados = this.creadorResultado.crearResultado(this.areaTextoIngresoResultados.getText());
+        
+        if(this.verificador.verificarArreglo(this.resultados)){
+            JOptionPane.showMessageDialog(this, "Has ingresado correctamente el resultado");
+            this.creadorResultado.calculoResultados(this.apuestas, this.resultados);
         }
-    }//GEN-LAST:event_botonOrdenarPorPuntajeActionPerformed
+        if(this.verificador.verificarArreglo(this.resultados)!=true){
+            JOptionPane.showMessageDialog(this, "Has ingresado incorrectamente el resultado");
+        }
+        
+    }//GEN-LAST:event_botonIngresarResultadoActionPerformed
+
+    private void botonReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonReportesActionPerformed
+        this.manejadorTabla.llenarTabla(tablaServicios, this.tiempoPromedio, this.promedioPasos, this.mayorCantidadPasos, this.menorCantidadPasos);
+    }//GEN-LAST:event_botonReportesActionPerformed
 
     
 
@@ -474,10 +553,8 @@ public class FramePrincipal extends javax.swing.JFrame {
     private javax.swing.JButton botonLimpiarAreaResultado;
     private javax.swing.JButton botonOrdenarAlfabeticamente;
     private javax.swing.JButton botonOrdenarPorPuntaje;
-    private javax.swing.JComboBox<String> comboBoxNoCaballo;
+    private javax.swing.JButton botonReportes;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -486,7 +563,6 @@ public class FramePrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -495,6 +571,8 @@ public class FramePrincipal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JList<String> listaCaballos;
     private javax.swing.JTabbedPane panelGeneral;
     private javax.swing.JTable tablaServicios;
     // End of variables declaration//GEN-END:variables

@@ -10,8 +10,8 @@ import modelo.Apuesta;
  *
  * @author ACER
  */
-public class VerificadorApuesta {
-    public Boolean verificarApuesta(int[] caballos){
+public class Verificador {
+    public Boolean verificarArreglo(int[] caballos){
         
         boolean correcta=true;
         
